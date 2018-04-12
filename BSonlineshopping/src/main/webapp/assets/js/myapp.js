@@ -1,12 +1,11 @@
-
 $(function() {
 
 	// Solving the active menu problem
 
-	switch(menu) {
+	switch (menu) {
 
 	case 'About Us':
-		$('#about').addClass('active'); 
+		$('#about').addClass('active');
 		break;
 	case 'Contact Us':
 		$('#contact').addClass('active');
@@ -17,50 +16,105 @@ $(function() {
 		break;
 
 	default:
-		if(menu == "Home") break; 
+		if (menu == "Home")
+			break;
 		$('#listProducts').addClass('active');
-		$('#a_'+menu).addClass('active');
+		$('#a_' + menu).addClass('active');
 		break;
 
 	}
 
-// code for jquery datatable
-	// create a dataset
-	
-	var products=[
-		
-		['1','ABC'],
-		['2','DEF'],
-		['3','GHI'],
-		['4','JKL'],
-		['5','MNO'],
-		['6','PQR'],
-		['7','STU'],
-		['8','WXY'],
-	];
-	
-	
-	
-	
+	// code for jquery datatable
+
 	var $table = $('#productListTable');
-	
+
 	// Execute the below code only where we have this table
-	if($table.length) {
+	if ($table.length) {
 		// console.log('Inside the table!');
-		
-	$table.DataTable({
-		
-		lengthMenu: [[3,5,10,-1],['3 Records','5 Records','10 Records','All']],
-		pageLength: 5,
-		data:products
-		
-	});
-	
-		
+
+		var jsonUrl = '';
+		if (window.categoryId == '') {
+
+			jsonUrl = window.contextRoot + '/json/data/all/products';
+
+		} else {
+			jsonUrl = window.contextRoot + '/json/data/category/'
+					+ window.categoryId + '/products';
+
+		}
+
+		$table
+				.DataTable({
+
+					lengthMenu : [ [ 3, 5, 10, -1 ],
+							[ '3 Records', '5 Records', '10 Records', 'All' ] ],
+					pageLength : 5,
+					ajax : {
+
+						url : jsonUrl,
+						dataSrc : ''
+					},
+					columns : [
+
+							{
+								data : 'code',
+								mRender : function(data, type, row) {
+
+									return '<img src="' + window.contextRoot
+											+ '/resources/images/' + data
+											+ '.jpg" class="dataTableImg"/>';
+
+								}
+
+							},
+
+							{
+
+								data : 'name'
+							},
+							{
+
+								data : 'brand'
+							},
+							{
+
+								data : 'unitPrice',
+								mRender : function(data, type, row) {
+
+									return '&#8377; ' + data
+								}
+
+							},
+							{
+
+								data : 'quantity'
+							},
+
+							{
+								data : 'id',
+								bSortable : false,
+								mRender : function(data, type, row) {
+
+									var str = '';
+									str += '<a href="'
+											+ window.contextRoot
+											+ '/show'
+											+ data
+											+ '/product" class="btn btn-success"><span class="glyphicon glyphicon-eye-open"></span></a>&#160;';
+									str += '<a href="'
+											+ window.contextRoot
+											+ '/cart/add'
+											+ data
+											+ '/product class="btn btn-primary"><span class="glyphicon glyphicon-shopping-cart"></span></a>';
+									return str;
+
+								}
+
+							}
+
+					]
+
+				});
+
 	}
-		});
-			
-		
-	
-	
-	
+});
