@@ -85,7 +85,7 @@
 </c:if>
 <!-- Loading the home content -->
 			<c:if test="${userClickShowProduct==true}">
-				<%@include file="singleproduct.jsp"%>
+				<%@include file="singleProduct.jsp"%>
 
 			</c:if>
 
